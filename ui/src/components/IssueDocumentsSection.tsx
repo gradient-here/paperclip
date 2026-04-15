@@ -505,7 +505,7 @@ export function IssueDocumentsSection({
     };
   }, [autosaveState, commitDraft, documentConflict, draft, markDocumentDirty, resetAutosaveState, sortedDocuments]);
 
-  const documentBodyShellClassName = "mt-3 overflow-hidden rounded-md";
+  const documentBodyShellClassName = "mt-3 overflow-y-auto rounded-md max-h-[640px]";
   const documentBodyPaddingClassName = "";
   const documentBodyContentClassName = "paperclip-edit-in-place-content min-h-[220px] text-[15px] leading-7";
   const toggleFoldedDocument = (key: string) => {

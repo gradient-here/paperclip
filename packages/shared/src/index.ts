@@ -206,6 +206,7 @@ export type {
   Issue,
   IssueAssigneeAdapterOverrides,
   IssueComment,
+  CompanyDocument,
   IssueDocument,
   IssueDocumentSummary,
   DocumentRevision,

@@ -16,6 +16,7 @@ import {
   budgetService,
   companyPortabilityService,
   companyService,
+  documentService,
   logActivity,
 } from "../services/index.js";
 import type { StorageService } from "../storage/types.js";
@@ -28,6 +29,7 @@ export function companyRoutes(db: Db, storage?: StorageService) {
   const portability = companyPortabilityService(db, storage);
   const access = accessService(db);
   const budgets = budgetService(db);
+  const documentsSvc = documentService(db);
 
   async function assertCanUpdateBranding(req: Request, companyId: string) {
     assertCompanyAccess(req, companyId);
@@ -102,6 +104,13 @@ export function companyRoutes(db: Db, storage?: StorageService) {
       return;
     }
     res.json(company);
+  });
+
+  router.get("/:companyId/documents", async (req, res) => {
+    const companyId = req.params.companyId as string;
+    assertCompanyAccess(req, companyId);
+    const docs = await documentsSvc.listCompanyDocuments(companyId);
+    res.json(docs);
   });
 
   router.post("/:companyId/export", validate(companyPortabilityExportSchema), async (req, res) => {

@@ -155,6 +155,42 @@ export function documentService(db: Db) {
       return rows.map((row) => mapIssueDocumentRow(row, true));
     },
 
+    listCompanyDocuments: async (companyId: string) => {
+      const rows = await db
+        .select({
+          id: documents.id,
+          companyId: documents.companyId,
+          issueId: issueDocuments.issueId,
+          key: issueDocuments.key,
+          title: documents.title,
+          format: documents.format,
+          latestBody: documents.latestBody,
+          latestRevisionId: documents.latestRevisionId,
+          latestRevisionNumber: documents.latestRevisionNumber,
+          createdByAgentId: documents.createdByAgentId,
+          createdByUserId: documents.createdByUserId,
+          updatedByAgentId: documents.updatedByAgentId,
+          updatedByUserId: documents.updatedByUserId,
+          createdAt: documents.createdAt,
+          updatedAt: documents.updatedAt,
+          issueIdentifier: issues.identifier,
+          issueTitle: issues.title,
+          issueStatus: issues.status,
+        })
+        .from(issueDocuments)
+        .innerJoin(documents, eq(issueDocuments.documentId, documents.id))
+        .innerJoin(issues, eq(issueDocuments.issueId, issues.id))
+        .where(and(eq(documents.companyId, companyId), eq(issueDocuments.companyId, companyId), eq(issues.companyId, companyId)))
+        .orderBy(desc(documents.updatedAt), asc(issueDocuments.key));
+
+      return rows.map((row) => ({
+        ...mapIssueDocumentRow(row, true),
+        issueIdentifier: row.issueIdentifier,
+        issueTitle: row.issueTitle,
+        issueStatus: row.issueStatus,
+      }));
+    },
+
     getIssueDocumentByKey: async (issueId: string, rawKey: string) => {
       const key = normalizeDocumentKey(rawKey);
       const row = await db

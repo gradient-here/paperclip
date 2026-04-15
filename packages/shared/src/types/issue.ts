@@ -74,6 +74,12 @@ export interface IssueDocument extends IssueDocumentSummary {
   body: string;
 }
 
+export interface CompanyDocument extends IssueDocument {
+  issueIdentifier: string | null;
+  issueTitle: string;
+  issueStatus: IssueStatus;
+}
+
 export interface DocumentRevision {
   id: string;
   companyId: string;

@@ -1,4 +1,5 @@
 import type {
+  CompanyDocument,
   Company,
   CompanyPortabilityExportRequest,
   CompanyPortabilityExportPreviewResult,
@@ -16,6 +17,7 @@ export type CompanyStats = Record<string, { agentCount: number; issueCount: numb
 export const companiesApi = {
   list: () => api.get<Company[]>("/companies"),
   get: (companyId: string) => api.get<Company>(`/companies/${companyId}`),
+  listDocuments: (companyId: string) => api.get<CompanyDocument[]>(`/companies/${companyId}/documents`),
   stats: () => api.get<CompanyStats>("/companies/stats"),
   create: (data: {
     name: string;
